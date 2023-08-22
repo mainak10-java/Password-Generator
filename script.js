@@ -18,6 +18,7 @@ let passwordLength=10;
 let checkCount=0;
 handleSlider();
 //Set strength circle color to grey
+setIndicator("#ccc");
 
 
 
@@ -37,11 +38,16 @@ function shufflePassword(array){
 function handleSlider(){
     inputSlider.value=passwordLength;
     lengthDisplay.innerText=passwordLength;
+
+    const min=inputSlider.min;
+    const max=inputSlider.max;
+    inputSlider.style.backgroundSize= ((passwordLength-min)*100/(max-min)) + "% 100%";
 }
 
 function setIndicator(color){
     indicator.style.backgroundColor=color;
     //Set shadow is homework
+    indicator.style.boxShadow=`0 0 20px ${color}`;
 }
 
 function getRndInteger(min, max){
@@ -92,14 +98,14 @@ function calcStrength(){
 
 async function copyContent(){
     try{
-        await navigator.clipboard.writeText(passwordDisplay.value);
+        await navigator.clipboard.writeText(passwordDisplay.value); // This method returns a promise
         copyMsg.innerText="Copied";
    }
    catch(e){
         copyMsg.innerText="Failed";
    }
 
-   copyMsg.classList("active");
+   copyMsg.classList.add("active");
 
    setTimeout(() =>{
         copyMsg.classList.remove("active");
@@ -128,7 +134,7 @@ allCheckBox.forEach( (checkbox) => {
 inputSlider.addEventListener('input',(e) => {
     passwordLength=e.target.value;
     handleSlider();
-});
+}); 
 
 copyBtn.addEventListener('click',  () =>{
     if(passwordDisplay.value)  // if the field is non-empty
@@ -182,6 +188,9 @@ generateBtn.addEventListener('click', () =>{
         password+=funcArr[i]();
     }
 
+    console.log(lowercaseCheck.checked);
+    console.log(funcArr[1]());
+
     console.log('Compulsory addition Done')
     //Adding the remaining length
     for(let i=0;i<passwordLength-funcArr.length;i++){
@@ -200,5 +209,5 @@ generateBtn.addEventListener('click', () =>{
 
     //Calculate strength of the password
     calcStrength();
-})
+});
 
